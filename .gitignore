@@ -1,0 +1,8 @@
+# Any vscode configuration folder
+**/.vscode/
+
+# Any STM32 build folder
+**/build/
+
+# Any STM32 Drivers will be downloaded with code generation
+**/Drivers/
