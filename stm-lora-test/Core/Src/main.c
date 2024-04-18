@@ -78,6 +78,12 @@ void SystemClock_Config(void);
 //   ms_elapsed++;
 // }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+  if(htim->Instance == TIM7){
+    ms_elapsed++;
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -116,6 +122,9 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  // Start Timer
+  HAL_TIM_Base_Start_IT(&htim7);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -125,23 +134,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_Delay(1000);
-    if(HAL_UART_Receive(&huart1, rx_buff, 10, 1000) == HAL_OK) //if transfer is successful
-    { 
-      __NOP(); //You need to toggle a breakpoint on this line!
-      
-      HAL_UART_Transmit(&huart1, rx_buff, 10, 1000);
-      
-      HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-    } else {
-      __NOP();
-      
-      HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+    if(ms_elapsed % 1000 == 0){
+      if(HAL_UART_Receive(&huart1, rx_buff, 10, 1000) == HAL_OK) //if transfer is successful
+      { 
+        __NOP(); //You need to toggle a breakpoint on this line!
+        
+        HAL_UART_Transmit(&huart1, rx_buff, 10, 1000);
+        
+        HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+      } else {
+        __NOP();
+        
+        HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+      }
+      //HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+      HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+    }else if(ms_elapsed % 100 == 0)
+    {
+      HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
     }
-    //HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-    HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+      
   }
   /* USER CODE END 3 */
 }
