@@ -20,7 +20,7 @@ For stm32-for-vscode, you can either do the automatic installation as described 
 1. Clone the repository
 2. Open the project (*.ioc file) in STM32 Cube MX
 3. Press Generate Code
-4. Open the project in VSCode
+4. Open the project folder that contains the .ioc in VSCode (e.g. `stm-lora-test`)
 5. Press F5 to build and debug
 
 Important: Generate Code overwrites all parts in the code that are not between `USER CODE BEGIN` and `USER CODE END` comments!
